@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Todolist</title>
+    <script src="vue.js" charset="utf-8"></script>
+</head>
+<body>
+    <div id="app">
+        <input type="text" v-model="inputValue">
+        <button v-on:click='handleBtnClick'>提交</button>
+        <ul>
+            <!-- <li v-for="item in list">{{item}}</li> -->
+            <todo-item v-bind:content="item" v-for="item in list"></todo-item><!--v-for获取item,传给content-->
+        </ul>
+    </div>
+    <script>
+        Vue.component("TodoItem",{//变成标签时候T变小写I变成符号-
+            props:['content'],//从content获取值
+            template:'<li>{{content}}</li>'//模板
+        })//创建全局组件
+        // var TodoItem = {
+        //     props:['content'],
+        //     template:'<li>{{content}}</li>'
+        // }//局部组件
+        var app =new Vue({
+            el:'#app',
+            // components:{
+            //     TodoItem:TodoItem
+            // },//注册局部组件
+            data: {
+                list:[],
+                inputValue:''
+            },
+            methods:{
+                handleBtnClick:function(){
+                this.list.push(this.inputValue)
+                this.inputValue=''
+                }
+            }
+        })
+    </script>
+</body>
+</html>
