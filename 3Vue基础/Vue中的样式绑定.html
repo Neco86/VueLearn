@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js" charset="utf-8"></script>
+    <style media="screen">
+        .activated{
+            color:red
+        }
+    </style>
+</head>
+<body>
+    <!-- calss对象绑定 -->
+    <!-- <div id="app" @click='handleDivClick' :class="{activated:isActivated}">hello world</div> -->
+
+    <!-- class数组绑定 -->
+    <!-- <div id="app" @click='handleDivClick' :class='[activated]'>hello world</div> -->
+
+    <!-- 绑定style -->
+    <!-- <div id="app" @click='handleDivClick' :style='styleObj'>hello world</div> -->
+    <div id="app" @click='handleDivClick' :style='[styleObj]'>hello world</div>
+
+
+    <script>
+        var vm=new Vue({
+            el:'#app',
+            data:{
+                // isActivated:false//calss对象绑定
+                // activated:''//class数组绑定
+                styleObj:{
+                    color:'black'//绑定style
+                }
+            },
+            methods:{
+                handleDivClick:function(){
+                // this.isActivated=!this.isActivated;//calss对象绑定
+                // this.activated=this.activated=='activated'?'':'activated'//class数组绑定
+                this.styleObj.color=this.styleObj.color=='black'?'red':'black'//绑定style
+                }
+            }
+        })
+    </script>
+</body>
+</html>

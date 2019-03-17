@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js" charset="utf-8"></script>
+</head>
+<body>
+    <div id="app">
+        <div v-for="(item,index) of list"
+        :key='item.id'>{{item.text}}----{{index}}
+        </div>
+        <hr>
+        <div v-for="(item,key,index) of userInfo">{{item}}---{{key}}---{{index}}</div>
+    </div>
+    <script>
+        var vm=new Vue({
+            el:'#app',
+            data:{
+                list:[{
+                    id:"0111001201",//数据库中的标识
+                    text:"hello"
+                },{
+                    id:"0111001202",
+                    text:"aaa"
+                },{
+                    id:"0111001203",
+                    text:"bbb"
+                },{
+                    id:"0111001204",
+                    text:"ccc"
+                }],
+                userInfo:{
+                    name:"ajaxstart",
+                    age:21,
+                    gender:'male'
+                }
+            }
+        })
+        /*
+        列表渲染:遍历时出现的问题
+        不能通过vm.list[]改,否则页面不会改
+            应该用变异方法pop push shift unshift splice sort reverse
+            或用set方法,vm.set(vm.list,index,content)
+                        或Vue.set(vm.list,index,content)
+            或改变引用为新的引用 vm.list=[{},{},{}]
+        不能通过vm.obj.newthing="xx"来能加内容
+            应该用set方法,vm.$set(vm.obj,key,content)
+                        或Vue.set(vm.obj,key,content)
+            或改变引用vm.obj={age:20,name:"xxx"}
+        */
+    </script>
+</body>
+</html>

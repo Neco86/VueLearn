@@ -1,0 +1,150 @@
+#Vue基础
+v-for       v-for ='todo of/in todos' //循环读取值
+            v-for ='todo of methods(todos)//可以加方法
+            v-for ='todo of 10//可以直接取值
+            v-for比v-if优先级高,如果想循环里判断,ul里写v-if,li里写for
+v-on        @xxx='xxx' //监听事件
+v-bind绑定   :xxx='xxx' //子向父传值
+            :class="{actived:isActived}" //class的对象绑定,isActived值在data里
+            :class='[activated,activatedone]'//class数组绑定,activated,activatedone值在data里
+            :class="classObj"
+
+            :style='styleObj'//绑定style
+            :style='[styleObj]'
+            :style='[styleObj],{fontSize:'20px'}'
+            //绑定的可以使对象'obj',模板{xxx:show},数组[activated],或者混合
+            //eg在data里 对象为obj{color:'red'} 模板为show:true 数组为activated:'xxx'(xxx在style里写明)
+
+            :key='item.id' v-for="(item,index) of list id是数据库中得到的标识
+v-text      v-text=''//文本值
+v-html      v-html=''//文本值,可有有html标签
+v-model     v-model=''//双向绑定文本值  在<input>、<textarea> 及 <select>上绑定数据
+            <!-- 当选中时，`picked` 为字符串 "a" -->
+            <input type="radio" v-model="picked" value="a">
+
+            <!-- `toggle` 为 true 或 false -->
+            <input type="checkbox" v-model="toggle">
+
+            <!-- 当选中第一个选项时，`selected` 为字符串 "abc" -->
+            <select v-model="selected">
+            <option value="abc">ABC</option>
+            </select>
+            修饰符
+            .lazy 在“change”时而非“input”时更新
+            .number 自动将用户的输入值转为数值类型
+            .trim 自动过滤用户输入的首尾空白字符
+v-if        v-if=''//true显示false不显示(不存在了),条件渲染
+                   //当切换显示时,会复用一样的东西
+                   //设置不同key值时,不会复用
+v-else-if   与v-if一起使用,中间不能隔别的
+v-else      与v-if一起使用,中间不能隔别的
+v-shwo      v-show=''//true显示false不显示(存在,不显示)
+创建全局组件
+Vue.component('组件名',{
+    template:'' 模板
+    })
+创建局部组件
+var 组件名={
+
+}
+在Vue里{
+    components:{
+        xxx:组件名  注册组件//！！！注意：注册组件不用引号！！！
+    }
+}
+
+el:'#xxx', 选取类
+data:{xxx:'xxx'} 数据
+data:function(){return{xxx:'xxx'}}复用
+methods:{xxx:function(){this.$emit('xxx')}} 方法(触发事件)
+props:['xxx','xxx'] xxx为v-bind传来的值
+computed:{xx:function(){return }}计算属性
+watch:{xx:function(){}}侦听器
+template:<slot></slot> slot为Something bad happened.    <alert-box>  Something bad happened.</alert-box>
+
+生命周期钩子函数不在methods里
+计算属性>侦听器>方法 (计算属性和侦听器有缓存,而方法没有)
+computed所包含的值发生改变时,被调用
+
+列表渲染:遍历时出现的问题
+不能通过vm.list[]改,否则页面不会改
+    应该用变异方法pop push shift unshift splice sort reverse
+    或用set方法,vm.set(vm.list,index,content)
+                或Vue.set(vm.list,index,content)
+    或改变引用为新的引用 vm.list=[{},{},{}] 可用filter(function(){return}), concat() 和 slice()替换数组
+不能通过vm.obj.newthing="xx"来能加内容
+    应该用set方法,vm.$set(vm.obj,key,content)
+                或Vue.set(vm.obj,key,content)
+    或改变引用vm.obj={age:20,name:"xxx"} 可用filter(), concat() 和 slice()替换数组
+如果不用创建的组件代替li(防止渲染出错),那么li的属性应该增加is="todo-item"这样就与<todo-item>相同了
+同理还有<ul>、<ol>、<table> 和 <select>
+
+<template>不会存在
+
+preventDefault() 方法阻止元素发生默认的行为（例如，当点击提交按钮时阻止对表单的提交）。
+event.stopPropagation() 方法阻止事件冒泡到父元素，阻止任何父事件处理程序被执行。(当div里嵌套span时,点击span也会造成div的点击)
+通常不用上方的,而用下面的方法
+事件修饰符
+.stop    阻止传递
+.prevent 阻止默认程序,如提交,跳转等
+.capture 先执行父级的函数，再执行子级的触发函数
+.self    只执行子级本身的函数
+.once    只执行一次
+.passive 与prevent相反,会立即触发,!!不要把 .passive 和 .prevent 一起使用,因为 .prevent 将会被忽略，同时浏览器可能会向你展示一个警告。!!
+<!-- 阻止单击事件继续传播 -->
+<a v-on:click.stop="doThis"></a>
+
+<!-- 提交事件不再重载页面 -->
+<form v-on:submit.prevent="onSubmit"></form>
+
+<!-- 修饰符可以串联 -->
+<a v-on:click.stop.prevent="doThat"></a>
+
+<!-- 只有修饰符 -->
+<form v-on:submit.prevent></form>
+
+<!-- 添加事件监听器时使用事件捕获模式 -->
+<!-- 即元素自身触发的事件先在此处理，然后才交由内部元素进行处理 -->
+<div v-on:click.capture="doThis">...</div>
+
+<!-- 只当在 event.target 是当前元素自身时触发处理函数 -->
+<!-- 即事件不是从内部元素触发的 -->
+<div v-on:click.self="doThat">...</div>
+2.1.4新增
+<!-- 点击事件将只会触发一次 -->
+<a v-on:click.once="doThis"></a>
+2.3.0新增
+<!-- 滚动事件的默认行为 (即滚动行为) 将会立即触发 -->
+<!-- 而不会等待 `onScroll` 完成  -->
+<!-- 这其中包含 `event.preventDefault()` 的情况 -->
+<div v-on:scroll.passive="onScroll">...</div>
+
+按键修饰符
+.enter
+.tab
+.delete (捕获“删除”和“退格”键)
+.esc
+.space
+.up
+.down
+.left
+.right
+
+系统修饰键(系统修饰键被一直按着时,释放其它按键，才能触发 )
+.ctrl
+.alt
+.shift
+.meta
+<!-- Alt + C -->
+<input @keyup.alt.67="clear">
+
+<!-- Ctrl + Click -->
+<div @click.ctrl="doSomething">Do something</div>
+
+2.5.0新增修饰符
+.exact 有且只有的意思
+
+鼠标修饰符
+.left
+.right
+.middle

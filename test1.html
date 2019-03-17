@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>test</title>
+    <script src="js/vue.js" charset="utf-8"></script>
+</head>
+
+<body>
+    <div id="app">
+        <input type="text" v-model='inputValue'>
+        <button v-on:click="warn('Form cannot be submitted yet.', $event)"> Submit</button>
+        <button-counter></button-counter>
+        <alert-box>Something bad happened.</alert-box>
+    </div>
+    <script>
+        Vue.component('alert-box', {
+            template: `
+    <div class="demo-alert-box">
+      <strong>Error!</strong>
+      <slot></slot>
+    </div>
+  `
+        })
+        Vue.component('button-counter', {
+            data: function() {
+                return {
+                    count: 0
+                }
+            },
+            template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+        })
+        var vm = new Vue({
+            el: '#app',
+            data: {
+                inputValue: ''
+            },
+            methods: {
+                warn: function(message, event) {
+                    // 现在我们可以访问原生事件对象
+                    if (event) event.preventDefault()
+                    alert(message)
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
