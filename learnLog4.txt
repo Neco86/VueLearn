@@ -1,1 +1,14 @@
 #Vue项目预热
+----------项目环境准备----------
+安装node
+1）上传服务器可以是自己任意路径，目前我的放置路径为  cd /app/software/
+2）解压上传（解压后的文件我这边将名字改为了nodejs，这个地方自己随意，只要在建立软连接的时候写正确就可以）
+    ① tar -xvf   node-v6.10.0-linux-x64.tar.xz
+    ② mv node-v6.10.0-linux-x64  nodejs
+    ③确认一下nodejs下bin目录是否有node 和npm文件，如果有执行软连接，如果没有重新下载执行上边步骤；
+3）建立软连接，变为全局
+   ①ln -s /app/software/nodejs/bin/npm /usr/local/bin/
+   ②ln -s /app/software/nodejs/bin/node /usr/local/bin/
+4）最后一步检验nodejs是否已变为全局
+   在Linux命令行node -v 命令会显示nodejs版本，如图所示为大功告成
+npm -v
