@@ -1,1 +1,108 @@
 #Vue深入了解组件
+----------组件使用的细节点----------
+①-----is属性解决渲染bug-----
+<ul>、<ol>、<table> 和 <select>不能用自定义组件,否则会渲染错误
+使用is="自定义组件"来实现
+
+<ul>
+    <li is="xxx"><li>
+</ul>
+
+<ol>
+    <li is="xxx"><li>
+</ol>
+
+<table>
+    <tbody>
+        <tr is='xxx'></tr>
+    </tbody>
+</table>
+
+<select>
+    <option is='xxx'></option>
+</select>
+②-----根组件data可以为对象{}-----
+子组件data必须为函数
+data:function(){
+    return{
+        count:"this Is Count",
+        content:"this is content",
+    }
+}
+③-----ref引用,操作dom-----
+<div ref="hello" @click="handleClick">xxx</div>
+methods:{
+    handleClick:function(){
+        alert(this.$refs.hello.innerHTML)
+    }
+}
+----------父子组件的数据传递----------
+①-----父组件向子组件传值
+在子组件中
+子组件不要修改父组件传来的值,会报错
+可以在data里定义传来的值为一个新的值
+②-----子组件向父组件传值
+通过触发事件$emit,可以带参数
+----------组件参数校验与非props特性----------
+①-----组件参数校验
+props:{
+    content:String
+    content:[Number,String]
+    content:{
+        type:Number,
+        required:true,
+        default:'defalut value',
+        validator:function(value){
+            return (value.length>5)
+        }
+    }
+}
+:content="'123'" content的值为123
+content="'123'" content的值为'123'
+②-----非props特性
+不在props里则无法使用
+属性会展示到dom上
+----------给组件绑定原生时间----------
+在根组件的handleClick
+<child @click.native='handleClick'></child>
+在子组件的handleClick
+<child @click='handleClick'></child>
+template:'<div @click="handleClick">child</div>'
+methods:{
+     handleClick:function(){
+         this.$emit('click')
+     }
+ }
+ ----------非父子组件间的传值----------
+ ①vuex
+ ②总线机制 (Bus/总线/发布订阅模式/观察者模式)
+ Vue.prototype.bus=new Vue()
+ this.bus.$emit('change',this.selfContent)
+ mounted:function(){
+     var this_=this;
+     this.bus.$on('change',function(msg){
+         this_.selfContent=msg;
+     })
+ }
+----------在Vue中使用插槽----------
+<child>
+    <p slot='xxx'>world</p>//这是插入内容
+</child>
+<slot name='xxx'>默认内容</slot>
+----------Vue中的作用域插槽----------
+展示效果在dom里时使用
+<child>
+    <template slot-scope='props'>
+        <li>{{props.item}}</li>
+    </template>
+</child>
+<slot v-for='item of list' :item=item></slot>
+----------动态组件与v-once指令----------
+①动态组件
+<component :is='type'></component>
+根据type动态展示
+②v-once指令
+Vue.component('child-one',{
+    template:'<div v-once>child-one</div>'
+})
+可以提高性能,当切换展示时,不会被销毁,存在在内存中
