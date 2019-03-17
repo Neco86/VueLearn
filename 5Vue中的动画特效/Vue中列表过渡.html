@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js" charset="utf-8"></script>
+    <style media="screen">
+        .fade-enter,.fade-leave-to{
+          opacity:0
+        }
+        .fade-enter-active,.fade-leave-active{
+          transition:opacity 1s;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <transition-group name='fade'>
+            <div v-for='(item,index) of list' :key='item.id'>
+                {{item.title}}
+            </div>
+        </transition-group>
+        <button type="button" name="button" @click='handleBtnClick'>Add</button>
+    </div>
+
+    <script>
+        var count=0
+        var vm = new Vue({
+            el: '#root',
+            data:{
+                list:[]
+            },
+            methods:{
+                handleBtnClick:function(){
+                    this.list.push({
+                            id:count++,
+                            title:'hello world'
+                    })
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>

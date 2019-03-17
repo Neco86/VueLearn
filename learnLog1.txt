@@ -38,7 +38,7 @@ v-if        v-if=''//true显示false不显示(不存在了),条件渲染
                    //设置不同key值时,不会复用
 v-else-if   与v-if一起使用,中间不能隔别的
 v-else      与v-if一起使用,中间不能隔别的
-v-shwo      v-show=''//true显示false不显示(存在,不显示)
+v-show      v-show=''//true显示false不显示(存在,不显示)
 创建全局组件
 Vue.component('组件名',{
     template:'' 模板

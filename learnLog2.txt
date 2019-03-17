@@ -62,7 +62,7 @@ content="'123'" content的值为'123'
 ②-----非props特性
 不在props里则无法使用
 属性会展示到dom上
-----------给组件绑定原生时间----------
+----------给组件绑定原生事件----------
 在根组件的handleClick
 <child @click.native='handleClick'></child>
 在子组件的handleClick

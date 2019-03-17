@@ -1,1 +1,171 @@
 #Vue中的动画特效
+----------Vue中CSS动画原理(过渡动画效果)----------
+<transition name='fade'>//没有name时,v-enter,v-enter-actived...
+    <div v-if='show'>hello world</div>//v-if v-show <component :is='type'></component>
+</transition>
+显示
+○------------------------○----------------------○
++fade-enter              ×fade-enter            ×fade-enter-active
++fade-enter-active       +fade-enter-to         ×fade-enter-to
+                          fade-enter-active
+隐藏
+○------------------------○----------------------○
++fade-leave              ×fade-leave            ×fade-leave-active
++fade-leave-active       +fade-leave-to         ×fade-leave-to
+                          fade-leave-active
+逐渐显示
+.fade-enter{
+  opacity:0
+}
+.fade-enter-active{
+  transition:opacity 1s;
+}
+逐渐消失
+.fade-leave-to{
+    opacity:0
+}
+.fade-leave-active{
+    transition:opacity 1s;
+}
+----------在Vue中使用Animate.css库----------
+①-----自定义动画
+@keyframes bounce-in {
+    0% {
+        transform:scale(0);
+    }
+    50% {
+        transform:scale(1.5);
+    }
+    100% {
+        transform:scale(1);
+    }
+}
+.active{//通过enter-active-class='active'自定义
+    transform-origin:left center;
+    animation:bounce-in 1s;
+}
+.leave{//通过leave-active-class='leave'自定义
+    transform-origin:left center;
+    animation:bounce-in 1s reverse;
+}
+<transition name='fade'
+            enter-active-class='active'
+            leave-active-class='leave'>
+    <div v-if='show'>hello world</div>
+</transition>
+②-----Animate动画
+<transition name='fade'
+            enter-active-class='animated swing'
+            leave-active-class='animated shake'>
+    <div v-if='show'>hello world</div>
+</transition>
+类名由下得
+https://daneden.github.io/animate.css/
+----------在Vue中同时使用过渡和动画----------
+①页面加载和刷新的动画
+<transition appear appear-active-class='animated swing'>
+    <div v-if='show'>hello world</div>
+</transition>
+②keyframe+transition动画(动画+渐变)
+keyframe由animate.css得到,默认1s
+写type='transition'则时间跟transition一样//不好使???
+:duration="{enter:5000,leave:10000}"自定义动画时间
+.fade-enter,.fade-leave-to{
+    opacity:0
+}
+.fade-enter-avtive,.fade-leave-active{
+    transition:opacity 3s;
+}
+<transition name='fade'
+            enter-active-class='animated swing fade-enter-active'
+            leave-active-class='animated shake fade-enter-active'
+            :duration="5000">
+    <div v-if='show'>hello world</div>
+</transition>
+----------Vue中的Js动画与Velocity.js的结合----------
+①-----自定义Js动画
+动画钩子
+①before-enter
+<transition
+    name='fade'
+    @before-enter='handleBeforeEnter'
+    >
+    <div v-if='show'>hello world</div>
+</transition>
+handleBeforeEnter:function(el){//el指包含的div标签
+    el.style.color='red'
+}
+②enter
+@enter="handleEnter"
+handleEnter:function(el,done){//el指包含的div标签,done为回调函数
+    setTimeout(()=>{el.style.color='green' done()},2000)//回调done后会触发@after-enter
+}
+③after-enter
+@after-enter='handleAfterEnter'
+handleAfterEnter:function(el){
+    el.style.color='black'
+}
+同理
+@before-leave='handleBeforeLeave'
+@leave="handleLeave"
+@after-leave='handleAfterLeave'
+①-----Velocity.js
+handleBeforeEnter:function(el){//el指包含的div标签
+    el.style.opacity=0
+},
+handleEnter:function(el,done){//el指包含的div标签,done为回调函数
+    Velocity(el,{opacity:1},{duration:1000,complete:done})
+},
+----------Vue中多个元素或组件的过渡----------
+①-----多个元素的过渡动画
+.fade-enter,.fade-leave-to{
+  opacity:0
+}
+.fade-enter-active,.fade-leave-active{
+  transition:opacity 1s;
+}
+<transition name='fade' mode='in-out'>//mode为in-out先进入后隐藏
+    <div v-if='show' key='hello'>hello world</div>
+    <div v-else key='bye'>Bye world</div>
+</transition>
+②-----多个组件的过渡动画
+<transition name='fade' mode='out-in'>
+    <component :is='type'></component>
+</transition>
+Vue.component('child-one',{
+    template:'<div v-once>child-one</div>'
+})
+Vue.component('child-two',{
+    template:'<div v-once>child-two</div>'
+})
+data:{
+    type:'child-one'
+}
+handleClick1:function(){
+    this.type=(this.type=='child-one'?'child-two':'child-one');
+}
+----------Vue中列表过渡----------
+<transition-group></transition-group>
+----------Vue中的动画封装----------
+<fade :show='show'><div>hello world</div></fade>a
+Vue.component('fade',{
+    props:['show'],
+    template:`
+    <transition name='fade'
+                @before-enter="handleBeforeEnter"
+                @enter="handleEnter"
+                >
+        <slot v-if='show'></slot>
+    </transition>`,
+    methods:{
+        handleBeforeEnter:function(el){
+            el.style.color='red'
+        },
+        handleEnter:function(el,done){
+            setTimeout(()=>{
+                el.style.color='green'
+                done()
+            },2000)
+        }
+    }
+})

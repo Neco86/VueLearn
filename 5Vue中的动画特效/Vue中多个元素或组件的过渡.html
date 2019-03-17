@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="../js/vue.js" charset="utf-8"></script>
+    <!-- <script src="../js/velocity.min.js" charset="utf-8"></script> -->
+    <style media="screen">
+        .fade-enter,.fade-leave-to{
+          opacity:0
+        }
+        .fade-enter-active,.fade-leave-active{
+          transition:opacity 1s;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root">
+        <transition name='fade' mode='out-in'>
+            <div v-if='show' key='hello'>hello world</div>
+            <div v-else key='bye'>Bye world</div>
+        </transition>
+        <button @click='handleClick'>toggel</button>
+        <hr>
+        <transition name='fade' mode='out-in'>
+            <component :is='type'></component>
+            <!-- <child-one v-if="type=='child-one'"></child-one>
+            <child-two v-if="type=='child-two'"></child-two> -->
+        </transition>
+        <button @click='handleClick1'>change</button>
+    </div>
+    <script>
+        Vue.component('child-one',{
+            template:'<div v-once>child-one</div>'
+        })
+        Vue.component('child-two',{
+            template:'<div v-once>child-two</div>'
+        })
+        var vm = new Vue({
+            el: '#root',
+            data:{
+                show:true,
+                type:'child-one'
+            },
+            methods:{
+                handleClick:function(){
+                    this.show=!this.show
+                },
+                handleClick1:function(){
+                    this.type=(this.type=='child-one'?'child-two':'child-one');
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
