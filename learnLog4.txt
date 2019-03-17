@@ -12,3 +12,21 @@
 4）最后一步检验nodejs是否已变为全局
    在Linux命令行node -v 命令会显示nodejs版本，如图所示为大功告成
 npm -v
+git --version
+
+sudo npm install --global vue-cli
+vue -V
+vue init webpack my-project
+    ?Target directory exists. Continue? Yes
+    ? Project name travel
+    ? Project description A Vue.js project
+    ? Author neco
+    ? Vue build standalone
+    ? Install vue-router? Yes
+    ? Use ESLint to lint your code? Yes
+    ? Pick an ESLint preset Standard
+    ? Set up unit tests No
+    ? Setup e2e tests with Nightwatch? No
+    ? Should we run `npm install` for you after the project has been created? (recommended) npm
+cd Travel
+npm run dev
